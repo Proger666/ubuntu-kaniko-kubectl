@@ -1,11 +1,10 @@
-FROM gcr.io/kaniko-project/executor:latest as builder
+FROM ubuntu:lunar as builder
+WORKDIR /app
+RUN apt update && apt install curl -y
+RUN curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" && chmod u+x ./kubectl
 
-FROM ubuntu:lunar
-
-COPY --from=builder /kaniko/executor /kaniko/executor
-
-RUN curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" && chmod u+x ./kubectl && cp ./kubectl /usr/bin/ && mv ./kubectl /usr/local/bin/kubectl
-
+FROM gcr.io/kaniko-project/executor:latest
+COPY --from=builder /app/kubectl /usr/bin/kubectl
 
 ENTRYPOINT ["tail"]
 CMD ["-f", "/dev/null"]
