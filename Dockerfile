@@ -2,7 +2,7 @@ FROM gcr.io/kaniko-project/executor:latest as builder
 
 FROM ubuntu:lunar
 
-COPY --from=builder . .
+COPY --from=builder /kaniko/executor /kaniko/executor
 
 RUN curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" && chmod u+x ./kubectl && cp ./kubectl /usr/bin/ && mv ./kubectl /usr/local/bin/kubectl
 
