@@ -6,4 +6,3 @@ RUN curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/s
 FROM gcr.io/kaniko-project/executor:latest
 COPY --from=builder /app/kubectl /usr/bin/kubectl
 
-ENTRYPOINT ["cat"]
